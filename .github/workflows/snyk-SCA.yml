@@ -39,8 +39,8 @@ jobs:
         echo "----------Authenticating Snyk-----------"
         ./snyk auth ${{secrets.Snyk_token}}
         echo "----------Snyk Scanning-----------"
-        ./snyk test --severity-threshold=medium --fail-on=upgradable --json --json-file-output=snyk.json
         echo "----------Snyk Monitor-----------"
+        ./snyk monitor --all-projects --severity-threshold=medium --fail-on=upgradable
         echo "------------Results-------------"
         uniqueCount=$(jq -r '.uniqueCount' < snyk.json)
         echo "uniqueCount=$uniqueCount"
