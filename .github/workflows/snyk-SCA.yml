@@ -48,6 +48,5 @@ jobs:
              snykLow=$(echo "$snykCount" | jq .issueCountsBySeverity{}.low )
              echo "CRITICAL = $snykCritical"
              echo "HIGH = $snykHigh"
-             echo "Medium = $snykMedium"
 
         
