@@ -1,0 +1,35 @@
+name: Snyk SCA Scan
+
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ "develop" ]
+
+permissions:
+  contents: read
+
+jobs:
+  trufflehog:
+    permissions:
+      contents: read 
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: trufflehogscanning
+      id: scan
+      continue-on-error: true
+      run: |
+         docker run -v "$(pwd):/workdir" -i --rm trufflesecurity/trufflehog:latest git file:///workdir --only-verified --fail
+         status = $?
+         echo $staus
+         if [ $status -gt 0 ]
+         then
+           curl -H 'Content-Type: application/json' -d ' {"text": "Your application has secrets" }'  https://accenture.webhook.office.com/webhookb2/c6aea564-fe88-48b4-9fa6-a737f1425035@e0793d39-0939-496d-b129-198edd916feb/IncomingWebhook/15e5aab7761341388f908a5fe592fbc9/570d319c-d336-48a2-b32e-88ba623aa565
+           exit 1
+         else
+            echo "check"
+            curl -H 'Content-Type: application/json' -d ' {"text": "Your application has no secrets" }'  https://accenture.webhook.office.com/webhookb2/c6aea564-fe88-48b4-9fa6-a737f1425035@e0793d39-0939-496d-b129-198edd916feb/IncomingWebhook/15e5aab7761341388f908a5fe592fbc9/570d319c-d336-48a2-b32e-88ba623aa565
+         fi
+          
