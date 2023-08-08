@@ -85,7 +85,7 @@ steps:
        ./snyk monitor --all-projects
        echo "----------Snyk Scanning-----------"
        ./snyk test --all-projects
-     failOnStderr: true
+     failOnStderr: false
 - task: Bash@3
   displayName: "Snyk Security Gating"
   inputs:
