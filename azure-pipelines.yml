@@ -91,7 +91,7 @@ steps:
   inputs:
      targetType: 'inline'
      script: |    
-       snykCount=$(curl -X GET --header 'Content-Type: application/json' --header 'Authorization: token $(snyk-token)' 'https://api.snyk.io/api/v1/org/3ce8ad2c-4905-476d-a6ca-df1d9605c959/project/16c0781c-9761-400a-b5c9-5a989c1fe8b4')
+       snykCount=$(curl -X GET --header 'Content-Type: application/json' --header 'Authorization: token $(snyk-token)' 'https://api.snyk.io/api/v1/org/<org. id>/project/<projectid>')
        CRITICAL=$(echo "$snykCount" | jq .issueCountsBySeverity.critical )
        HIGH=$(echo "$snykCount" | jq .issueCountsBySeverity.high )
        MEDIUM=$(echo "$snykCount" | jq .issueCountsBySeverity.medium )
