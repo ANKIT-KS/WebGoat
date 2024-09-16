@@ -1,0 +1,34 @@
+name: Trufflehog
+
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ "develop" ]
+
+permissions:
+  contents: read
+
+jobs:
+  trufflehog:
+    permissions:
+      contents: read 
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: trufflehogscanning
+      run: |
+         docker run -v "$(pwd):/workdir" -i --rm trufflesecurity/trufflehog:latest git file:///workdir --only-verified --fail
+      if: always()
+    - name: Notify dedicated teams channel for secrets
+      if: failure()
+      run: |
+         curl -H 'Content-Type: application/json' -d ' {"text": "Your application has secrets" }' ${{ secrets.trufflehog_webhook}}
+         echo "Secrets found"
+        
+    - name: Notify dedicated teams channel for secrets not found
+      if: success()
+      run: |
+            echo "check"
+            # curl -H 'Content-Type: application/json' -d ' {"text": "Your application has no secrets" }' ${{ secrets.trufflehog_webhook}}
